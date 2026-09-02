@@ -1,19 +1,20 @@
 library(tidyverse)
 
 ## 1. Exponential growth equation 
-NO <- 2
+N0 <- 2
 lambda <- 2
 time <- 0:10
 
-Nt <- NO * lambda**time
+Nt <- N0 * lambda**time
 
-ggplot(data=NULL,aes(x=time, y=Nt)) + geom_point() + geom_line() + theme_bw()
+ggplot(data=NULL,aes(x=time, y=Nt)) + 
+  geom_point() + 
+  geom_line() + 
+  theme_bw()
 
 
 ## Three populations, different starting population size
-N0 <- c(10,20,40) 
-lambda <- 2
-time <- 0:5
+N0 <- c(2,10,20) 
 
 Nt.s <- sapply(N0, function(n) n * lambda**time) %>% as.data.frame() %>% cbind(time) %>% 
   pivot_longer(cols=1:3, names_to = 'group', values_to = 'N')
@@ -23,9 +24,8 @@ ggplot(data=Nt.s, aes(x=time, y=N, color=group)) + geom_point() + geom_line() + 
 
 
 ## Three populations, different lambdas
-N0 <- 100 
-lambdas <- c(0.5, 1, 1.5)
-time <- 0:5
+lambdas <- c(0.5, 1, 2)
+time <- 0:10
 
 Nt.all <- sapply(lambdas, function(x) N0 * x**time) %>% as.data.frame() %>% cbind(time) %>% pivot_longer(cols=1:3, names_to = 'group', values_to = 'N')
 
@@ -38,7 +38,7 @@ ggplot(data=Nt.all, aes(x=time, y=N, color=group)) + geom_point() + geom_line() 
 #### generate 21 years of *simulated* Miami blue data ###
 year <- 0:20
 set.seed(5)
-Count <- abs(round(rnorm(21, (100*1.05^year), 70),0))
+Count <- abs(round(rnorm(21, (50*1.05^year), 70),0))
 dat <- as.data.frame(cbind(year,Count))
 
 ggplot(data=dat, aes(x=year, y=Count)) + geom_point() + geom_line() + theme_bw()
@@ -56,7 +56,7 @@ ggplot(data=NULL, aes(x=dat$Count[1:20], y=obs.R)) + geom_point() + geom_abline(
   labs(x="Population density",y="observed R") + annotate(geom="text", x=50, y=1.15,label="zero growth line", size=5) + theme_bw()
 
 
-#### conduct 50 year similation analysis
+#### conduct 50 year simulation analysis
 years <- 0:50
 set.seed(1)
 sim.Rs <- sample(x = obs.R, size = length(years-1), replace = TRUE)
