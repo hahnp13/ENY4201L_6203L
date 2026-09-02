@@ -1,0 +1,278 @@
+---
+title: 'Mod 2 - Activity 2: Density dependent dynamics'
+author: "Phil Hahn"
+date: "5/24/2020"
+output: html_document
+runtime: shiny
+---
+
+This activity will provide background information and examples of density-dependent (i.e. logistic growth) population dynamics in R.
+
+### TO DO:
+
+#### 1. Complete this activity by reading through the R code and thinking about the questions in this document. No need to answer the questions in this document. 
+
+#### 2. Follow along and run the associated R code found on canvas.
+
+#### 3. **You will need to answer the questions on canvas for Module 2, Activity 2.**
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Before we being, make sure to load the tidyverse package. Install first if necessary.
+```{r, echo = T}
+library(tidyverse)
+```
+
+## 1. logistic growth equation
+We will start with a simple example of logistic growth. Think about a hypothetical population that starts with 2 indivduals. Let's imagine the population size doubles every year ($\lambda=2$). However, at high density competition for resource becomes fierce and the population growth slows down. The environment can only support so many indivduals. We will simulate 10 generations (time = 10). How large will the population be in year 10? Below I first set up a few variables:
+
+**N0** is the population size at time zero.
+
+**rd** is discrete growth rate factor. It is similar to $\lambda (or R)$ expect that $r_d = log(\lambda)$ or alternative $\lambda = e ^ {r_d}$. So, when $r_d > 0$ the population increases, but when $r_d < 0$ the population decreases.
+
+**K** is the carrying capacity, or the maximum population size an environment can support. In other words, the carrying capacity is the population size at which the observed per capita growth increment is reduced to zero (i.e. when $\frac{N_t}{K} = 1$). 
+
+**time** (t) is the number of years we want data for.
+
+Then I set up the logistic growth equation (aka the Ricker model):
+
+$N_{t+1} = N_te ^ {r_d(1 - \frac{N_t}{K})}$
+
+The first part of the equation is simply the discrete exponential growth equation: $N_{t+1} = N_te ^ {r_d}$. Remember, because $\lambda = e ^ {r_d}$ this is the same as: $N_{t+1} = N_t * \lambda$
+
+
+Below is a function in that contains this equation in the for loop. **dlogistic** is a function that allows us to easily use the equation later. In this first example, we have a population that starts with 2 indivduals. The per carrying capacity ($K$) is 100, meaning that when the population reaches 100 the population will stop growing. Before that, it will increase exponentially. We run this first simulation for 10 years.  
+
+```{r , echo=T}
+## lines 3-16 in associated R code
+dlogistic <- function(K = 100, rd = 1, N0 = 2, t = 10) {
+  N <- c(N0, numeric(t))
+  for (i in 1:t) N[i + 1] <- {
+    N[i] * exp(rd * (1 - N[i]/K))
+    }
+  return(N)
+  }
+
+Nts <- dlogistic()
+
+t <- 15; k <- 100;
+
+ggplot(data=NULL, aes(x=0:10, y=Nts)) + geom_point() + geom_line() + geom_hline(yintercept=(k), lty=2) + labs(x="time",y="Count") + theme_bw()
+
+```
+
+In what year does the population size reach K? In the R code, change N0 or $K$ to see how it affects the population size at time 10.
+
+
+## Populations with different starting populations
+```{r , echo=T}
+## lines 19-24 in associated R code
+N0s <- c(0, 1, 10, 25, 50, 90, 110)
+time <- 0:10
+Ndat1 <- sapply(N0s, function(n) dlogistic(N0 = n)) %>% as.data.frame() %>% cbind(time) %>% pivot_longer(cols=1:7, names_to = 'group', values_to = 'N')
+
+ggplot(data=Ndat1, aes(x=time, y=N, color=group)) + geom_point() + geom_line() + theme_bw()
+
+```
+
+## Populations with carrying capacities from 50 to 1000
+```{r , echo=T}
+## lines 26-32 in associated R code
+k.s <- c(50, 100, 250, 500, 750, 1000)
+time <- 0:15
+Ndat2 <- sapply(k.s, function(k) dlogistic(K = k, t = 15)) %>% as.data.frame() %>% cbind(time) %>%
+  pivot_longer(cols=1:6, names_to = 'group', values_to = 'N')
+
+ggplot(data=Ndat2, aes(x=time, y=N, color=group)) + geom_point() + geom_line() + theme_bw()
+
+```
+
+## Populations with different growth rates rd
+```{r , echo=T}
+## lines 35-40 in associated R code
+rd.v <- seq(1.3, 2.8, by = 0.3)
+t <- 15
+Ndat3 <- sapply(rd.v, function(r) dlogistic(rd = r, t = t)) %>% as.data.frame() %>% cbind(time) %>% pivot_longer(cols=1:6, names_to = 'group', values_to = 'N')
+
+label_names <- c(V1="rd = 1.3",V2="rd = 1.6",V3="rd = 1.9",V4="rd = 2.2",V5="rd = 2.5",V6="rd = 2.8")
+
+ggplot(data=Ndat3, aes(x=time, y=N)) + geom_point() + geom_line() + theme_bw() + geom_hline(yintercept = 100, lty=2) + 
+  facet_wrap(~group, labeller=labeller(group=label_names))
+
+```
+
+The above populations differ only in population growth rate ($r_d$). Why do they differ so much?
+
+## Populations with sensitivity to starting sizes
+```{r , echo=T}
+## lines 43-55 in associated R code
+N.init <- c(97, 98, 99); time <- 0:30
+Ndat4 <- sapply(N.init, function(n0) dlogistic(rd = 2.8, N0 = n0, t = 30)) %>% as.data.frame() %>% cbind(time) %>%
+  pivot_longer(cols=1:3, names_to = 'group', values_to = 'N')
+
+ggplot(data=Ndat4, aes(x=time, y=N)) + geom_point() + geom_line() + geom_hline(yintercept = 100, lty=2) + facet_wrap(~group, nrow=3) + theme_bw()
+
+```
+
+We started these populations only 1 indivudal apart. V1=97, V2=98, V3=99. When $r_d$ is high starting (2.8 in this case), do starting conditions matter?
+
+
+The plot below shows population growth rate against population size for group V1. 
+
+```{r, echo=T}
+DD.V1 <- Ndat4 %>% filter(group=='V1')
+DD.R <- DD.V1$N[2:31]/DD.V1$N[1:30]
+
+ggplot(data=NULL, aes(x=DD.V1$N[1:30], y=DD.R)) + geom_point() + geom_hline(yintercept=1,lty=2)+geom_vline(xintercept = 100, color="red")+ 
+  xlab("Population density") + ylab("Observed R in any given year") + theme_bw()
+```
+
+The red line is plotted at the carrying capacity (K). The dashed line is $\lambda (orR) = 1$. Note that I've plotted $\lambda (orR)$ because the interpretation in this context is more intutative. $\lambda (orR) = 2$ the population would double each year. $\lambda (orR) = 0.5$ the population would be halved each year. What do you see? Think about this...
+
+## 2. Miami blue population dynamics example
+Think back to our Miami blue _Cyclargus thomasi bethunbakeri_ example -- the endangered species only exists in one small population. Read more about the biology [here](http://entnemdept.ufl.edu/creatures/bfly/miami_blue.htm).
+
+![Miami blue butterflies. credit:J.Gage](/Users/hahnp/OneDrive - University of Florida/Pictures/miami-blue-170302-0336.jpg) 
+
+Recall that we have 21 years of data where researchers counted the butterflies at several sites across their range. The values are estimated population size each year. Remember that these are **simulated data** and do not reflect actual abundances of the butterfly.
+
+
+```{r , echo=F, warning=F}
+## lines 59-75 in associated R code
+year <- 0:20
+set.seed(5)
+Count <- abs(round(rnorm(21, (100*1.05^year), 70),0))
+dat <- as.data.frame(cbind(year,Count))
+
+ggplot(data=dat, aes(x=year, y=Count)) + geom_point() + geom_line() + theme_bw() + ggtitle("Miami blue data")
+
+dat$obs.R <- NA
+
+dat$obs.R[2:21] <- dat$Count[2:21]/dat$Count[1:20]
+obs.R <- dat$Count[2:21]/dat$Count[1:20]
+
+ggplot(data=NULL, aes(x=dat$Count[1:20], y=obs.R)) + geom_point() + geom_abline(intercept=1,slope=0,lty=2) + 
+  xlab("Population density") + ylab("Observed R in any given year") + theme_bw()
+```
+
+The above plots show the Miami blue data we collected. The second plot shows that population growth rates can range widely from over 4 (quadupling!) to below 1 (declining). Does the observed population growth growth rate (**obs.R**) change with population size?
+
+
+Now let's use these data to project out 50 years, much like we did last week. We know the population size and the rates of increase/decrease for 20 transitions. Now we want to know what the popualtion size might be in 50 years. Last week we assumed exponential growth and we got some crazy high values.  **This week, let's assumne logistic growth, rather than exponetial.** Will population size substantially increase? Is there a chance the Miami blue will go extinct?
+
+We can answer these questions by randomly sampling from our list of 20 R's for each tranisition, just like last week. So, each year the population with increase (or decrease) by one of the randomly sampled R's in our dataset. We can also estimate K as the mean of the counts (K = 154). We will start our simulations at the minimum number recorded in the surveys n = 22 butterflies.
+
+```{r , echo=F, warning=F}
+## lines 78-92 in associated R code
+years <- 0:50
+set.seed(9)
+simDD.Rs <- sample(x = obs.R, size = 50, replace = TRUE)
+
+DD50yr <- numeric(length(years))
+DD50yr[1] <- min(dat$Count) 
+
+for (t in 1:50) DD50yr[t + 1] <- {
+  DD50yr[t] * exp(simDD.Rs * (1 - DD50yr[t]/154))
+}
+
+ggplot(data=NULL, aes(x=years, y=DD50yr)) + geom_line()+ ggtitle("Butterfly population with R's selected from data and K=154") + theme_bw()
+```
+
+There we have it. The population is predicted to increase until it reaches 154 butterflies and then stabilize. So, even though we are randomly selecting the R values that range from ~0.1 to 5, we still have a population that is stable at carrying capacity. That's when the carrying capacity is equal to the population size (i.e. when $\frac{N_t}{K} = 1$) the equation becomes $N_{t+1} = N_t$. Is this realistic? Why was there so much fluctuation in the real data we collected? ...What's that? You think slight annual flucuations to environmental conditions? Great! Let's build in some environmental stochasticity.
+
+We build in environmental stochasticity by having K vary from year to year, because we could assume the environmental conditions (K) might not be the same every year for many reasons. We could estimate this variability, but for simplicity we will just say K varies randomly form year to year with a mean of 154 and a standard deviation of 50 (this seems a good approximation based on the data). We will assume R is 2, assuming that at low densities the population could double each year. Now we can select a K value at random for each transition year to estimate the 50-year dynamics for one hypothetical popualtion. 
+
+```{r , echo=F, warning=F}
+## lines 81-92 in associated R code
+years <- 0:50
+set.seed(12)
+
+DD50yr <- numeric(length(years))
+DD50yr[1] <- min(dat$Count) 
+
+Ksim = rnorm(50,154,50) 
+
+for (t in 1:50) {
+  DD50yr[t + 1] <- 
+    DD50yr[t] * exp(log(2) * (1 - DD50yr[t]/Ksim[t]))
+}
+
+ggplot(data=NULL, aes(x=years, y=DD50yr)) + geom_point() + geom_line() + theme_bw()
+
+```
+
+Above we have the graph for one hypothetical population with K's bouncing randomly around the mean population density estimated from our actual sample data. We can also plot the observed R against the population density. Why do we see the pattern below?
+
+```{r , echo=F, warning=F}
+simR <- NA
+simR <- DD50yr[2:51]/DD50yr[1:50]
+
+ggplot(data=NULL, aes(x=DD50yr[1:50], y=simR)) + geom_point() + geom_abline(intercept=1,slope=0)+ 
+  xlab("Population density") + ylab("Observed R in any given year") + theme_bw()
+```
+
+
+Pretty neat, but this is just one simulation, so how much can we really say. Let's do a bunch.
+
+
+```{r, echo=T, warning=F}
+## lines 106-118 in associated R code
+PopSim1 <- function(N0, years = 50, sims = 1, Ks) {
+  sim.K = matrix(sample(Ks, size = sims * years, replace = TRUE),
+                 nrow = years, ncol = sims)
+  output <- numeric(years + 1)
+  output[1] <- N0
+  outmat <- sapply(1:sims, function(i) {
+    for (t in 1:years) output[t + 1] <- 
+        round(output[t] * exp(log(2) * (1 - output[t]/sim.K[t,i])), 0)
+    output
+  })
+  return(outmat)
+}
+```
+
+Just like last week we now have the function **PopSim1** that can run a bunch of these simulations for us. Let's start with 10 by setting 'sims=10' in the function below.
+
+```{r, echo=T, warning=F}
+## lines 121-125 in associated R code
+simDD10 <- as.data.frame(PopSim1(N0 = 22, sims = 10, Ks=Ksim)) %>% mutate(year=0:50)  %>%  gather("sim","count",-year)
+
+ggplot(simDD10, aes(x=year,y=count,color=sim))+geom_line() + theme_bw()
+```
+
+
+What do we see? Are they all the same? Do we get any crazy high values? Any extinct populations? 
+
+It doesn't look like any populations crashed to zero, but some went pretty low. Let's try plotting out the minimum population size from each simulation. If it's lower than 22 (our starting value), that's probably bad news. How many are lower than 22?
+
+```{r, echo=T, warning=F, message=F}
+## line 128 from R code
+ggplot(data=simDD10 %>% group_by(sim) %>% summarize(min_count=min(count)), aes(x=min_count)) + ggtitle('minimum population size from each simulation') +
+  geom_histogram()
+```
+
+
+Finally, let's calculate a few summaries of the estimated counts at the end of our simluations in year 50. In the code below, I subsetted the simulated data to include only year 50. 
+
+**year50_quantiles** is the 90% quantile range. If we do enough simluations, these values are equivilent to the 90% confidence intervals. Essentially 90% of our simulated population sizes in year 50 should be within that range.
+
+**n_DD_extinct** counts up the number of simlulated populations that dropped below 22. We could consider these **functionally extinct**.
+
+```{r, echo=T, warning=F}
+simDDsummary <- simDD10 %>% filter(year==50) %>% select(count) 
+year50_DD_quantiles <- quantile(simDDsummary$count, probs=c(.025,.975))
+
+n_DD_extinct <- simDD10 %>% group_by(sim) %>% summarize(min_count=min(count)) %>% filter(min_count<22) %>% count() %>% as.data.frame
+
+year50_DD_quantiles
+n_DD_extinct
+```
+
+What can we learn from the 10 simulations based on the last two figures? What is the estimated 95% confidence intervals of population sizes we might expect 50 years from now? Do any populations go extinct or **functionally extinct**? Re-run line 121 and remake the plots. Do things change? How much?
+
+Run 100 simulations and estimate year50_quantiles and n_extinct. Are these estimates reasonable? Complete questions on canvas.
+
+
