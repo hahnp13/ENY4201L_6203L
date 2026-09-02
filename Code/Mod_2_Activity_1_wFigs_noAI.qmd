@@ -5,11 +5,7 @@ date: "9/2/2026"
 description: |
     Version using R code with no GenAI
 format: 
-  pdf:
-      documentclass: article
-#format: 
- # html:
-  #  code-fold: true
+  docx: default
 ---
 
 # Overview
