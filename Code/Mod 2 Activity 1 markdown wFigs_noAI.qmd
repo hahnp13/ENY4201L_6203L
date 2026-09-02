@@ -37,6 +37,7 @@ By the end of this module, students will be able to:
 ```{r}
 #| warning: false
 library(tidyverse)
+library(viridis)
 ```
 
 ## Part 1. Explore exponential growth equation and parameter
@@ -75,21 +76,11 @@ ggplot(data=NULL,aes(x=time, y=Nt)) + geom_point(size=2) + geom_line() + theme_b
 
 #### Question 1: How large is the population in year 10?
 
-To answer this question, you will have to seek assistance from a generative AI model using the [Navigator](https://it.ufl.edu/ai/navigator-chat/). Launch the Navigator chat and select a model (some models won't render a plot, claude and gemini are good, gpt may work ok). It also runs much, much smoother in the free version of ChatGPT, so you can use the ChatGPT website to complete this assignment, if you'd like. Copy/paste the prompt below, **make sure to click *Code Interpreter* or it will not produce a plot**. Modify the prompt by replacing the **X**'s with the numbers you want.
-
-*I am a college student studying exponential population growth in my insect ecology course. I need you act as an R coding assistant. Generate a ggplot2 plot to visualize the exponential growth of a population that starts with X individuals and has a growth rate (lambda) of X over X years. The plot should show time on the x-axis and population size on the y-axis, with appropriate labels and a title. Also, provide a textual explanation of the results.*
-
-If the response only gives you R code, reprompt to ask it to show you the plot (and make sure **Code Interpreter** is clicked on).
-
-If you get only weird python code, you can use the following prompt: *don't respond in python. only output r code NO PYTHON.*
-
-If you get totally stuck, please message the instructor and they can send you a file with the plots.
+The above plot shows the exponential growth for this scenario. To get the exact population size at time 10, you will need to do a little math using the equations above.
 
 #### Question 2: How does starting population sizes of 2, 10, and 20 affect the final results?
 
-Now we will look at the effect of changing the starting population size. Use the prompt three populations at size $N_0$ = 10, 20, and 40.
-
-*Use the same model, but do three simulations changing the starting population size (2, 10, 20).*
+Now we will look at the effect of changing the starting population size. Adjust the starting populations size to $N_0$ = 10, 20, and 40 and calculate the new answers.
 
 ```{r}
 #| echo: true
@@ -103,45 +94,59 @@ time <- 0:10
 Nt.s <- sapply(N0, function(n) n * lambda**time) %>% as.data.frame() %>% cbind(time) %>% pivot_longer(cols=1:3, names_to = 'group', values_to = 'N')
 
 ## Population sizes for the six years
-ggplot(data=Nt.s, aes(x=time, y=N, color=group)) + geom_point() + geom_line() + theme_bw()
+ggplot(data=Nt.s, aes(x=time, y=N, color=group)) + 
+  geom_point() + 
+  geom_line(linewidth = 1.5) + 
+  scale_color_viridis(discrete = T)+
+  theme_bw()
 
 ```
 
 #### Question 3: How does plotting on the log-scale change the results? Does it affect the population sizes, or does it only change the visualization?
 
-Prompt your genAI model to plot the data on the $log_{10}$ scale to answer Question 3.
+We can also view the data on the log_10 scale, use the plot below to answer Question 3.
 
 ```{r}
 #| echo: true
 #| warning: false
 ## Population sizes for the six years on $log_{10}$ scale
-ggplot(data=Nt.s, aes(x=time, y=N, color=group)) + geom_point() + geom_line() + scale_y_log10() + theme_bw()
+ggplot(data=Nt.s, aes(x=time, y=N, color=group)) + 
+  geom_point(size=3) + 
+  geom_line(linewidth = 1.5) + 
+  scale_color_viridis(discrete = T)+  
+  scale_y_log10() + 
+  theme_bw()
 ```
 
 #### Question 4: How does lambda affect population growth rates, specifically when lamdba is above or below 1?
 
-Prompt your model to update the graphs and output to answer Question 4. Tell it to use lambda values of 0.5, 1, and 2. Start by asking it to plot on the linear (normal) scale. If that is difficult to view, ask it for the log-scale.
+Below is a plot with lambda values of 0.5, 1, and 2 and the linear scale and log-scale (second below).
 
 ```{r}
 #| echo: true
 #| warning: false
 ## lines 25-34 in associated R code
-N0 <- 100 
+N0 <- 2 
 lambdas <- c(0.7, 1, 1.5)
 time <- 0:5
 
 Nt.all <- sapply(lambdas, function(x) N0 * x**time) %>% as.data.frame() %>% cbind(time) %>% pivot_longer(cols=1:3, names_to = 'group', values_to = 'N')
 
 ## Population sizes for the six years 
-ggplot(data=Nt.all, aes(x=time, y=N, color=group)) + geom_point(size=2) + geom_line() + theme_bw()
+ggplot(data=Nt.all, aes(x=time, y=N, color=group)) + 
+  geom_point(size=3) + 
+  geom_line(linewidth = 1.5) + 
+  scale_color_viridis(discrete = T)+ 
+  theme_bw()
+
+## Population sizes for the six years on $log_{10}$ scale
+ggplot(data=Nt.all, aes(x=time, y=N, color=group)) + 
+  geom_point(size=3) + 
+  geom_line(linewidth = 1.5) + 
+  scale_color_viridis(discrete = T)+  scale_y_log10() + 
+  theme_bw()
 ```
 
-```{r}
-#| echo: true
-#| warning: false
-## Population sizes for the six years on $log_{10}$ scale
-ggplot(data=Nt.all, aes(x=time, y=N, color=group)) + geom_point(size=2) + geom_line() + scale_y_log10() + theme_bw()
-```
 
 ## Part 2. Miami blue population dynamics case study
 
@@ -157,12 +162,6 @@ Below we will analyze data for population size counts for a the endangered Miami
 
 Now we will simulate 21 years of data where researchers counted the butterflies at several sites across their range. The values are estimated population size each year. Please note that these are **hypothetical data** that we are simulating and do not reflect actual abundances of the butterfly.
 
-Enter the prompt below into your same AI conservation:
-
-*Now I would like to explore a case study of a hypothetical butterfly species, we will call it the Miami Blue butterfly. Below is R code to simulate a data set. Make a ggplot with year on the x-axis and Count on the y-axis to plot the population dynamics through time. In the interpretation, ignore the parameters to simulate the data. Rather, treat these as real data with unknown underlying growth parameters. Ask me to paste the R code into the next prompt.*
-
-Then copy/paste the next four lines into the prompt:
-
 ```{r}
 #| echo: true
 #| warning: false
@@ -172,17 +171,21 @@ Count <- abs(round(rnorm(21, (100*1.05^year), 70),0))
 dat <- as.data.frame(cbind(year,Count))
 ```
 
+
+#### Question 5: Briefly describe your plot of 22 year population dynamics for the Miami blue butterfly.
+
 ```{r}
 #| echo: true
 #| warning: false
 #| include: true
 # plot dynamics
-ggplot(data=dat, aes(x=year, y=Count)) + geom_point() + geom_line() + theme_bw()
+ggplot(data=dat, aes(x=year, y=Count)) + 
+  geom_point() + 
+  geom_line() + 
+  theme_bw()
 ```
 
-Now ask your coding assistant to calculate the rate of increase (lambda) for each year-to-year transition, called "obs.R" and plot this against time on the x-axis.
-
-Next ask your coding assistant to plot the calculated lambda against the population size in the previous year. This will allow you look at how population density may or may not be correlated with population growth rate.
+There is quite a bit of up and down in the population numbers. We can calculate the rate of increase (𝜆 or R) for each year-to-year transition. Here is the plot, where ‘obs.R’ is the increase or decrease in each year:
 
 ```{r}
 #| echo: true
@@ -193,26 +196,33 @@ dat$obs.R <- NA
 dat$obs.R[2:21] <- dat$Count[2:21]/dat$Count[1:20]
 obs.R <- dat$Count[2:21]/dat$Count[1:20]
 
-ggplot(data=dat, aes(x=year, y=obs.R)) + geom_point() + geom_line() + geom_hline(yintercept=1,lty=2) + theme_bw()
+ggplot(data=dat, aes(x=year, y=obs.R)) + 
+  geom_point(size=2) + 
+  geom_line() + 
+  geom_hline(yintercept=1,lty=2) + 
+  theme_bw()
 ```
+
+And here is a plot showing observed R against population density of the previous year:
 
 ```{r}
 #| echo: true
 #| warning: false
 #| include: true
-ggplot(data=NULL, aes(x=dat$Count[1:20], y=obs.R)) + geom_point() + geom_abline(intercept=1,slope=0, linetype="dashed") + 
-  labs(x="Population density",y="observed R")+ theme_bw()
+ggplot(data=NULL, aes(x=dat$Count[1:20], y=obs.R)) + 
+  geom_point(size=2) + geom_abline(intercept=1,slope=0, linetype="dashed") + 
+  labs(x="Population density",y="observed R")+ 
+  theme_bw()
 ```
 
 Think about what these results imply about the population dynamics and what may or may not regulate the populations?
 
 ### Part 2c. Project out population size estimates for 50 years
 
-We know the population size and the rates of increase/decrease for 20 transitions that we have data for. Now we want to know what the population size might be in 50 years. Will it substantially increase? Is there a chance the Miami blue will go extinct?
+WWe know the population size and the rates of increase/decrease for 20 transitions that we have data for. Now we want to know what the population size might be in 50 years. Will it substantially increase? Is there a chance the Miami blue will go extinct?
+We can answer these questions by randomly sampling from our list of 20 R’s. We do this 50 times to simulate population dynamics for 50 years. What density should we start the simulation? We could pick the average density (~100) or the minimum (22). Let’s be conservative and start our simulated population at the minimum of 22 butterflies. Here is the plot for one of these simulations:
 
-We can answer these questions by randomly sampling from our list of 20 R's. We do this 50 times to simulate population dynamics for 50 years. What density should we start the simulation? We could pick the average density (\~100) or the minimum (22). Let's be conservative and start our simulated population at the minimum of 22 butterflies. Have your coding assistant conduct this analysis using the prompt below:
-
-*I would like to simulate the population dynamics of this butterfly over 50 years. To do this, I would like to use the exponential growth model with a starting density of 22 and for each year, I would like to randomly sample one of the lambda's that we calculated from our data above. In the R code, use 'set.seed(1)' for reproducibility.*
+#### Question 6: Describe your plot of the 50 year simulation.
 
 ```{r}
 #| echo: true
@@ -230,15 +240,20 @@ for (t in 1:50) out50yr[t + 1] <- {
   out50yr[t] * sim.Rs[t]
   }
 
-ggplot(data=NULL, aes(x=years, y=out50yr)) + labs(y="count") + geom_point() + geom_line() + theme_bw()
+ggplot(data=NULL, aes(x=years, y=out50yr)) + 
+  labs(y="count") + 
+  geom_point() + 
+  geom_line() + 
+  theme_bw()
 
 ```
 
 Booming!
 
-This is just one random simulation. We might want to do many versions of this simulation to get an idea of how variables these results might be. Ask your coding assistant to conduct a sensitivity analysis by running the simulations for 100 populations. From these results, calculate 1) the percent of populations that go extinct, 2) the percent of populations that exceed 1 million butterflies in any year, and 3) the 2.5 and 97.5 quantiles for the final population sizes.
+This is just one random simulation. We might want to do many versions of this simulation to get an idea of how variables these results might be. We can conduct a sensitivity analysis by running the simulations for 100 populations. From these results, calculate 1) the percent of populations that go extinct, 2) the percent of populations that exceed 1 million butterflies in any year, and 3) the 2.5 quantile and 4) 97.5 quantile for the final population sizes.
 
-You may need to copy/paste the code below to help it figure out how to do this:
+Now we should see we have run 100 simulated populations, each with dynamics for 50 years. What do we see? Are they all the same? Why or why not? Here is a plot showing only 10 populations so its easier to see:
+
 
 ```{r}
 #| echo: true
@@ -253,23 +268,26 @@ PopSim <- function(Rs, N0, years = 50, sims = 1) {
     for (t in 1:years) output[t + 1] <- round(output[t] * sim.RM[t, i], 0)
     output
     })
-  return(outmat)
-  }
+  return(as.data.frame(outmat))
+}
 ```
 
-Now we should see we have run 100 simulated populations, each with dynamics for 50 years. What do we see? Are they all the same? Why or why not?
-
-Some of the populations are so big that it's hard to see the patterns for some of the populations. Probably you coding assistant will plot the data on both the linear and log scale so you can visualize them better. If not, you may need to ask for the plots on the log scale.
+Some of the populations are so big that it’s hard to see the patterns for some of the populations. Probably you coding assistant will plot the data on both the linear and log scale so you can visualize them better. If not, you may need to ask for the plots on the log scale.
 
 ```{r}
 #| echo: true
 #| warning: false
 #| include: true
 ## lines 92-100 in associated R code
-sim10 <- as.data.frame(PopSim(Rs = obs.R, N0 = 43, sims = 100)) %>% mutate(year=0:50) %>%  gather("sim","count",-year)
+sim10 <- as_tibble(PopSim(Rs = obs.R, N0 = 43, sims = 100)) %>% 
+  mutate(year = 0:50) %>%  
+  pivot_longer(-year, names_to = "sim", values_to = "count")
 
 # plot the 10 simulated populations
-ggplot(sim10, aes(x=year,y=count,color=sim))+geom_line() + theme_bw()
+ggplot(sim10, aes(x=year,y=count,color=sim))+
+  geom_line(linewidth = 1) + 
+  scale_color_viridis(discrete = T)+  theme_bw()+ 
+  theme(legend.position = "none")
 
 ```
 
@@ -277,60 +295,36 @@ ggplot(sim10, aes(x=year,y=count,color=sim))+geom_line() + theme_bw()
 #| echo: true
 #| warning: false
 #| include: true
-ggplot(sim10, aes(x=year,y=log(count+1),color=sim))+geom_line() + theme_bw()
+ggplot(sim10, aes(x=year,y=log(count+1),color=sim))+
+  geom_line(linewidth = 0.75, alpha=0.75) + 
+  scale_color_viridis(discrete = T)+  
+  theme_bw() + 
+  theme(legend.position = "none")
 ```
 
-```{r}
-#| echo: true
-#| warning: false
-#| message: false
-#| include: true
-ggplot(data=sim10 %>% filter(year==50), aes(x=log(count+1)))+geom_histogram()
-```
-
-```{r}
-#| echo: true
-#| warning: false
-#| include: true
-simsummary <- sim10 %>% filter(year==50) %>% select(count) 
-year50_quantiles <- quantile(simsummary$count, probs=c(.025,.975))
-n_extinct <- sim10 %>% filter(year==50 & count==0) %>% count() %>% as.data.frame()
-n_greater_1mil <- sim10 %>% filter(year==50 & count>1000000) %>% count() %>% as.data.frame()
-```
 
 ```{r}
 #| echo: true
 #| warning: false
 #| include: true
-n_extinct
+year50_data <- sim10[sim10$year == 50, ]
+
+data.frame(
+  n_extinct = sum(year50_data$count == 0),
+  n_greater_1mil = sum(year50_data$count > 1000000),
+  q02.5 = quantile(year50_data$count, probs = 0.025),
+  q97.5 = quantile(year50_data$count, probs = 0.975)
+)
 ```
 
-```{r}
-#| echo: true
-#| warning: false
-#| include: true
-n_greater_1mil
-```
+#### Question 7: From these results, what are the values for the following calculations:
 
-```{r}
-#| echo: true
-#| warning: false
-#| include: true
-year50_quantiles
-```
-
-#### Question 5: From these results, what are the values for the following calculations:
-
-1)  the percent of populations that go extinct?\
+1)  the percent of populations that go extinct?
 2)  the percent of populations that exceed 1 million butterflies in any year?
 3)  the 2.5 and 97.5 quantiles for the final population sizes?
 
-#### Question 6. Write a brief summary of your results (100-150 words) that you might communicate to a land manager about the Miami Blue population dyanamics and the potential for extinction.
+#### Question 8. Write a brief summary of your results (100-150 words) that you might communicate to a land manager about the Miami Blue population dynamics and the potential for extinction. Specifically mention whether you think this is a realistic scenario.
 
-You can ask your assistant to help you with this question (please turn of **Code Interpreter**).
 
-#### Question 7. Is this a realistic scenario or are there any factors that we might be overlooking about the population dynamics?
+#### Question 9-10. These question is not relevant for this version, please just enter “NA” or skip
 
-You can ask your assistant to help you with this question (please turn of **Code Interpreter**).
-
-#### Question 8. Download and sumit your prompts and a text file.

@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Phil Hahn">
+<meta name="dcterms.date" content="2026-09-02">
+
+<title>Mod 2 - Activity 1: density independent dynamics</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Mod 2 Activity 1 markdown wFigs_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Mod 2 Activity 1 markdown wFigs_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="Mod 2 Activity 1 markdown wFigs_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="Mod 2 Activity 1 markdown wFigs_files/libs/quarto-html/popper.min.js"></script>
+<script src="Mod 2 Activity 1 markdown wFigs_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Mod 2 Activity 1 markdown wFigs_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Mod 2 Activity 1 markdown wFigs_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Mod 2 Activity 1 markdown wFigs_files/libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Mod 2 Activity 1 markdown wFigs_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Mod 2 Activity 1 markdown wFigs_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Mod 2 Activity 1 markdown wFigs_files/libs/bootstrap/bootstrap-efbb37e9afcc02144ebbc7afd12a776f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Mod 2 - Activity 1: density independent dynamics</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Phil Hahn </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 2, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="overview" class="level1">
+<h1>Overview</h1>
+<p>Goal: This module introduces the fundamental principles of exponential population growth, explores how key parameters influence population size, and applies this knowledge to a real-world conservation case study involving the endangered Miami blue butterfly. Students will leverage both traditional ecological concepts and the power of generative AI to gain a comprehensive understanding of population dynamics.</p>
+<section id="learning-outcomes" class="level2">
+<h2 class="anchored" data-anchor-id="learning-outcomes">Learning Outcomes:</h2>
+<p>By the end of this module, students will be able to:</p>
+<ul>
+<li>Define and explain the core concepts of exponential population growth, including the parameters of the model (N0, λ, t) and their impact on population size.</li>
+<li>Utilize a generative AI model to explore the effects of varying model parameters on population growth, interpreting the resulting visualizations and data.</li>
+<li>Apply the principles of exponential growth to analyze a real-world case study – the Miami blue butterfly – and discuss potential conservation strategies.</li>
+<li>Evaluate the limitations of using exponential growth models to describe real-world population dynamics, recognizing the influence of ecological factors and complexities.</li>
+</ul>
+</section>
+<section id="overview-of-tasks" class="level2">
+<h2 class="anchored" data-anchor-id="overview-of-tasks">Overview of Tasks:</h2>
+<section id="task-1-reviewing-exponential-growth-concepts-approx.-60-90-minutes" class="level3">
+<h3 class="anchored" data-anchor-id="task-1-reviewing-exponential-growth-concepts-approx.-60-90-minutes">Task 1: Reviewing Exponential Growth Concepts (Approx. 60-90 minutes)</h3>
+<p><strong>Reviewing:</strong> Review the provided introductory material on exponential growth in this document (Part 1). Pay close attention to the definitions of N0 (initial population size), λ (growth rate), and t (time). With the help of your AI coding assistant, prepare your answers for Questions 1-5 (you will need to submit these to Canvas later).</p>
+</section>
+<section id="task-2-analyzing-the-miami-blue-butterfly-case-study-approx.-60-90-minutes" class="level3">
+<h3 class="anchored" data-anchor-id="task-2-analyzing-the-miami-blue-butterfly-case-study-approx.-60-90-minutes">Task 2: Analyzing the Miami Blue Butterfly Case Study (Approx. 60-90 minutes)</h3>
+<p><strong>Case study:</strong> - Task 2a: Review the provided resources on the Miami blue butterfly (Part 2). Understand the threats to its population and the conservation efforts being undertaken. - Task 2b: Model Application: Simulate data and make plots of Miami blue butterfly populations with your AI coding assistant. - Task 2c: Conservation Recommendation: Based on your understanding of exponential growth and the challenges faced by the Miami blue butterfly, formulate a brief recommendation for a land manager. Discuss the limitations of applying a simple exponential growth model to the Miami blue butterfly population. What other factors might influence its growth rate in the real world?</p>
+</section>
+<section id="task-3-complete-the-assessment-in-canvas" class="level3">
+<h3 class="anchored" data-anchor-id="task-3-complete-the-assessment-in-canvas">Task 3: Complete the Assessment in Canvas</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+</section>
+<section id="part-1.-explore-exponential-growth-equation-and-parameter" class="level2">
+<h2 class="anchored" data-anchor-id="part-1.-explore-exponential-growth-equation-and-parameter">Part 1. Explore exponential growth equation and parameter</h2>
+<p>We will start with a simple example of exponential growth. Think about a hypothetical population that starts with 2 individuals. Let’s imagine the population size doubles every year (<span class="math inline">\(\lambda=2\)</span>) and has distinct generations. Therefore, we will model discrete population growth, rather than continuous population growth. We will simulate 10 generations (time = 10). How large will the population be in year 10? Below I first set up a few variables:</p>
+<p><strong>N0</strong> is the population size at time zero.</p>
+<p><strong>lambda</strong> (<span class="math inline">\(\lambda\)</span>) is the population growth rate. Sometimes I’ll call this ‘R’ for convenience. When (<span class="math inline">\(\lambda (or R)&gt;1\)</span>), the population size increases. When (<span class="math inline">\(\lambda (or R)&lt;1\)</span>) the population size decreases.</p>
+<p><strong>time</strong> (t) is the number of years we want data for.</p>
+<p><strong>Nt</strong> is the population at times (t).</p>
+<p>Then I set up the exponential growth equation for discrete population growth:</p>
+<p><span class="math inline">\(N_{t+1} = N_t * \lambda\)</span>.</p>
+<p>Another way to write this equation, which is more convenient to code in R is:</p>
+<p><span class="math inline">\(N_t = N_0 * \lambda^t\)</span>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## lines 3-10 in associated R code</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>NO <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>time <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>Nt <span class="ot">&lt;-</span> NO <span class="sc">*</span> lambda<span class="sc">**</span>time</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span><span class="cn">NULL</span>,<span class="fu">aes</span>(<span class="at">x=</span>time, <span class="at">y=</span>Nt)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Mod-2-Activity-1-markdown-wFigs_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="question-1-how-large-is-the-population-in-year-10" class="level4">
+<h4 class="anchored" data-anchor-id="question-1-how-large-is-the-population-in-year-10">Question 1: How large is the population in year 10?</h4>
+<p>To answer this question, you will have to seek assistance from a generative AI model using the <a href="https://it.ufl.edu/ai/navigator-chat/">Navigator</a>. Launch the Navigator chat and select a model (some models won’t render a plot, claude and gemini are good, gpt may work ok). It also runs much, much smoother in the free version of ChatGPT, so you can use the ChatGPT website to complete this assignment, if you’d like. Copy/paste the prompt below, <strong>make sure to click <em>Code Interpreter</em> or it will not produce a plot</strong>. Modify the prompt by replacing the <strong>X</strong>’s with the numbers you want.</p>
+<p><em>I am a college student studying exponential population growth in my insect ecology course. I need you act as an R coding assistant. Generate a ggplot2 plot to visualize the exponential growth of a population that starts with X individuals and has a growth rate (lambda) of X over X years. The plot should show time on the x-axis and population size on the y-axis, with appropriate labels and a title. Also, provide a textual explanation of the results.</em></p>
+<p>If the response only gives you R code, reprompt to ask it to show you the plot (and make sure <strong>Code Interpreter</strong> is clicked on).</p>
+<p>If you get only weird python code, you can use the following prompt: <em>don’t respond in python. only output r code NO PYTHON.</em></p>
+<p>If you get totally stuck, please message the instructor and they can send you a file with the plots.</p>
+</section>
+<section id="question-2-how-does-starting-population-sizes-of-2-10-and-20-affect-the-final-results" class="level4">
+<h4 class="anchored" data-anchor-id="question-2-how-does-starting-population-sizes-of-2-10-and-20-affect-the-final-results">Question 2: How does starting population sizes of 2, 10, and 20 affect the final results?</h4>
+<p>Now we will look at the effect of changing the starting population size. Use the prompt three populations at size <span class="math inline">\(N_0\)</span> = 10, 20, and 40.</p>
+<p><em>Use the same model, but do three simulations changing the starting population size (2, 10, 20).</em></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## lines 13-22 in associated R code</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>N0 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">10</span>,<span class="dv">20</span>) </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>time <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>Nt.s <span class="ot">&lt;-</span> <span class="fu">sapply</span>(N0, <span class="cf">function</span>(n) n <span class="sc">*</span> lambda<span class="sc">**</span>time) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> <span class="fu">cbind</span>(time) <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">names_to =</span> <span class="st">'group'</span>, <span class="at">values_to =</span> <span class="st">'N'</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="do">## Population sizes for the six years</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>Nt.s, <span class="fu">aes</span>(<span class="at">x=</span>time, <span class="at">y=</span>N, <span class="at">color=</span>group)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Mod-2-Activity-1-markdown-wFigs_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="question-3-how-does-plotting-on-the-log-scale-change-the-results-does-it-affect-the-population-sizes-or-does-it-only-change-the-visualization" class="level4">
+<h4 class="anchored" data-anchor-id="question-3-how-does-plotting-on-the-log-scale-change-the-results-does-it-affect-the-population-sizes-or-does-it-only-change-the-visualization">Question 3: How does plotting on the log-scale change the results? Does it affect the population sizes, or does it only change the visualization?</h4>
+<p>Prompt your genAI model to plot the data on the <span class="math inline">\(log_{10}\)</span> scale to answer Question 3.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Population sizes for the six years on $log_{10}$ scale</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>Nt.s, <span class="fu">aes</span>(<span class="at">x=</span>time, <span class="at">y=</span>N, <span class="at">color=</span>group)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">scale_y_log10</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Mod-2-Activity-1-markdown-wFigs_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="question-4-how-does-lambda-affect-population-growth-rates-specifically-when-lamdba-is-above-or-below-1" class="level4">
+<h4 class="anchored" data-anchor-id="question-4-how-does-lambda-affect-population-growth-rates-specifically-when-lamdba-is-above-or-below-1">Question 4: How does lambda affect population growth rates, specifically when lamdba is above or below 1?</h4>
+<p>Prompt your model to update the graphs and output to answer Question 4. Tell it to use lambda values of 0.5, 1, and 2. Start by asking it to plot on the linear (normal) scale. If that is difficult to view, ask it for the log-scale.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">## lines 25-34 in associated R code</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>N0 <span class="ot">&lt;-</span> <span class="dv">100</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>lambdas <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.7</span>, <span class="dv">1</span>, <span class="fl">1.5</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>time <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">5</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>Nt.all <span class="ot">&lt;-</span> <span class="fu">sapply</span>(lambdas, <span class="cf">function</span>(x) N0 <span class="sc">*</span> x<span class="sc">**</span>time) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> <span class="fu">cbind</span>(time) <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">names_to =</span> <span class="st">'group'</span>, <span class="at">values_to =</span> <span class="st">'N'</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="do">## Population sizes for the six years </span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>Nt.all, <span class="fu">aes</span>(<span class="at">x=</span>time, <span class="at">y=</span>N, <span class="at">color=</span>group)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Mod-2-Activity-1-markdown-wFigs_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Population sizes for the six years on $log_{10}$ scale</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>Nt.all, <span class="fu">aes</span>(<span class="at">x=</span>time, <span class="at">y=</span>N, <span class="at">color=</span>group)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">scale_y_log10</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Mod-2-Activity-1-markdown-wFigs_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="part-2.-miami-blue-population-dynamics-case-study" class="level2">
+<h2 class="anchored" data-anchor-id="part-2.-miami-blue-population-dynamics-case-study">Part 2. Miami blue population dynamics case study</h2>
+<section id="part-2a.-review-info-about-the-butterfly" class="level3">
+<h3 class="anchored" data-anchor-id="part-2a.-review-info-about-the-butterfly">Part 2a. Review info about the butterfly</h3>
+<p>The Miami blue <em>Cyclargus thomasi bethunbakeri</em> is an endangered species in Florida. It was once widespread and occurred throughout much of south Florida, but now only one small population remains in a preserve. Read more about the biology <a href="http://entnemdept.ufl.edu/creatures/bfly/miami_blue.htm">here</a>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="miami-blue-170302-0336.jpg" class="img-fluid figure-img"></p>
+<figcaption>Miami blue butterflies. credit:J.Gage</figcaption>
+</figure>
+</div>
+<p>Below we will analyze data for population size counts for a the endangered Miami blue butterfly. First, <a href="https://www.floridastateparks.org/learn/saving-miami-blue-butterfly-0">read more</a> about conservation actions being taken by the Daniels Lab here at UF and watch the <a href="https://youtu.be/d1NDRgPG4kQ">video</a>.</p>
+</section>
+<section id="part-2b.-examine-butterfly-data" class="level3">
+<h3 class="anchored" data-anchor-id="part-2b.-examine-butterfly-data">Part 2b. Examine butterfly data</h3>
+<p>Now we will simulate 21 years of data where researchers counted the butterflies at several sites across their range. The values are estimated population size each year. Please note that these are <strong>hypothetical data</strong> that we are simulating and do not reflect actual abundances of the butterfly.</p>
+<p>Enter the prompt below into your same AI conservation:</p>
+<p><em>Now I would like to explore a case study of a hypothetical butterfly species, we will call it the Miami Blue butterfly. Below is R code to simulate a data set. Make a ggplot with year on the x-axis and Count on the y-axis to plot the population dynamics through time. In the interpretation, ignore the parameters to simulate the data. Rather, treat these as real data with unknown underlying growth parameters. Ask me to paste the R code into the next prompt.</em></p>
+<p>Then copy/paste the next four lines into the prompt:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>year <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">20</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">5</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>Count <span class="ot">&lt;-</span> <span class="fu">abs</span>(<span class="fu">round</span>(<span class="fu">rnorm</span>(<span class="dv">21</span>, (<span class="dv">100</span><span class="sc">*</span><span class="fl">1.05</span><span class="sc">^</span>year), <span class="dv">70</span>),<span class="dv">0</span>))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">cbind</span>(year,Count))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot dynamics</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat, <span class="fu">aes</span>(<span class="at">x=</span>year, <span class="at">y=</span>Count)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Mod-2-Activity-1-markdown-wFigs_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now ask your coding assistant to calculate the rate of increase (lambda) for each year-to-year transition, called “obs.R” and plot this against time on the x-axis.</p>
+<p>Next ask your coding assistant to plot the calculated lambda against the population size in the previous year. This will allow you look at how population density may or may not be correlated with population growth rate.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>obs.R <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>obs.R[<span class="dv">2</span><span class="sc">:</span><span class="dv">21</span>] <span class="ot">&lt;-</span> dat<span class="sc">$</span>Count[<span class="dv">2</span><span class="sc">:</span><span class="dv">21</span>]<span class="sc">/</span>dat<span class="sc">$</span>Count[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>]</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>obs.R <span class="ot">&lt;-</span> dat<span class="sc">$</span>Count[<span class="dv">2</span><span class="sc">:</span><span class="dv">21</span>]<span class="sc">/</span>dat<span class="sc">$</span>Count[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>]</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat, <span class="fu">aes</span>(<span class="at">x=</span>year, <span class="at">y=</span>obs.R)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="dv">1</span>,<span class="at">lty=</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Mod-2-Activity-1-markdown-wFigs_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span><span class="cn">NULL</span>, <span class="fu">aes</span>(<span class="at">x=</span>dat<span class="sc">$</span>Count[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>], <span class="at">y=</span>obs.R)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_abline</span>(<span class="at">intercept=</span><span class="dv">1</span>,<span class="at">slope=</span><span class="dv">0</span>, <span class="at">linetype=</span><span class="st">"dashed"</span>) <span class="sc">+</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Population density"</span>,<span class="at">y=</span><span class="st">"observed R"</span>)<span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Mod-2-Activity-1-markdown-wFigs_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Think about what these results imply about the population dynamics and what may or may not regulate the populations?</p>
+</section>
+<section id="part-2c.-project-out-population-size-estimates-for-50-years" class="level3">
+<h3 class="anchored" data-anchor-id="part-2c.-project-out-population-size-estimates-for-50-years">Part 2c. Project out population size estimates for 50 years</h3>
+<p>We know the population size and the rates of increase/decrease for 20 transitions that we have data for. Now we want to know what the population size might be in 50 years. Will it substantially increase? Is there a chance the Miami blue will go extinct?</p>
+<p>We can answer these questions by randomly sampling from our list of 20 R’s. We do this 50 times to simulate population dynamics for 50 years. What density should we start the simulation? We could pick the average density (~100) or the minimum (22). Let’s be conservative and start our simulated population at the minimum of 22 butterflies. Have your coding assistant conduct this analysis using the prompt below:</p>
+<p><em>I would like to simulate the population dynamics of this butterfly over 50 years. To do this, I would like to use the exponential growth model with a starting density of 22 and for each year, I would like to randomly sample one of the lambda’s that we calculated from our data above. In the R code, use ‘set.seed(1)’ for reproducibility.</em></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="do">## lines 62-75 in associated R code</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>years <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">50</span> <span class="co">#setup a vector for years from 0 to 50</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)   <span class="co"># set seed for the randomization so we can reproduce the randomized results</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>sim.Rs <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x =</span> obs.R, <span class="at">size =</span> <span class="dv">50</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>) <span class="co"># this line randomly samples values from 'obs.R' 50 times with replacement</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>out50yr <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(years))</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>out50yr[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">min</span>(dat<span class="sc">$</span>Count) </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>) out50yr[t <span class="sc">+</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> {</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  out50yr[t] <span class="sc">*</span> sim.Rs[t]</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span><span class="cn">NULL</span>, <span class="fu">aes</span>(<span class="at">x=</span>years, <span class="at">y=</span>out50yr)) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">y=</span><span class="st">"count"</span>) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Mod-2-Activity-1-markdown-wFigs_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Booming!</p>
+<p>This is just one random simulation. We might want to do many versions of this simulation to get an idea of how variables these results might be. Ask your coding assistant to conduct a sensitivity analysis by running the simulations for 100 populations. From these results, calculate 1) the percent of populations that go extinct, 2) the percent of populations that exceed 1 million butterflies in any year, and 3) the 2.5 and 97.5 quantiles for the final population sizes.</p>
+<p>You may need to copy/paste the code below to help it figure out how to do this:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>PopSim <span class="ot">&lt;-</span> <span class="cf">function</span>(Rs, N0, <span class="at">years =</span> <span class="dv">50</span>, <span class="at">sims =</span> <span class="dv">1</span>) {</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  sim.RM <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">sample</span>(Rs, <span class="at">size =</span> sims <span class="sc">*</span> years, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">nrow =</span> years, <span class="at">ncol =</span> sims)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  output <span class="ot">&lt;-</span> <span class="fu">numeric</span>(years <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  output[<span class="dv">1</span>] <span class="ot">&lt;-</span> N0</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  outmat <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>sims, <span class="cf">function</span>(i) {</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>years) output[t <span class="sc">+</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(output[t] <span class="sc">*</span> sim.RM[t, i], <span class="dv">0</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    output</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(outmat)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Now we should see we have run 100 simulated populations, each with dynamics for 50 years. What do we see? Are they all the same? Why or why not?</p>
+<p>Some of the populations are so big that it’s hard to see the patterns for some of the populations. Probably you coding assistant will plot the data on both the linear and log scale so you can visualize them better. If not, you may need to ask for the plots on the log scale.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="do">## lines 92-100 in associated R code</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>sim10 <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">PopSim</span>(<span class="at">Rs =</span> obs.R, <span class="at">N0 =</span> <span class="dv">43</span>, <span class="at">sims =</span> <span class="dv">100</span>)) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">year=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">50</span>) <span class="sc">%&gt;%</span>  <span class="fu">gather</span>(<span class="st">"sim"</span>,<span class="st">"count"</span>,<span class="sc">-</span>year)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the 10 simulated populations</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sim10, <span class="fu">aes</span>(<span class="at">x=</span>year,<span class="at">y=</span>count,<span class="at">color=</span>sim))<span class="sc">+</span><span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Mod-2-Activity-1-markdown-wFigs_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sim10, <span class="fu">aes</span>(<span class="at">x=</span>year,<span class="at">y=</span><span class="fu">log</span>(count<span class="sc">+</span><span class="dv">1</span>),<span class="at">color=</span>sim))<span class="sc">+</span><span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Mod-2-Activity-1-markdown-wFigs_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>sim10 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(year<span class="sc">==</span><span class="dv">50</span>), <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">log</span>(count<span class="sc">+</span><span class="dv">1</span>)))<span class="sc">+</span><span class="fu">geom_histogram</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Mod-2-Activity-1-markdown-wFigs_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>simsummary <span class="ot">&lt;-</span> sim10 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(year<span class="sc">==</span><span class="dv">50</span>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(count) </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>year50_quantiles <span class="ot">&lt;-</span> <span class="fu">quantile</span>(simsummary<span class="sc">$</span>count, <span class="at">probs=</span><span class="fu">c</span>(.<span class="dv">025</span>,.<span class="dv">975</span>))</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>n_extinct <span class="ot">&lt;-</span> sim10 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(year<span class="sc">==</span><span class="dv">50</span> <span class="sc">&amp;</span> count<span class="sc">==</span><span class="dv">0</span>) <span class="sc">%&gt;%</span> <span class="fu">count</span>() <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>n_greater_1mil <span class="ot">&lt;-</span> sim10 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(year<span class="sc">==</span><span class="dv">50</span> <span class="sc">&amp;</span> count<span class="sc">&gt;</span><span class="dv">1000000</span>) <span class="sc">%&gt;%</span> <span class="fu">count</span>() <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>n_extinct</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   n
+1 18</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>n_greater_1mil</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   n
+1 21</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>year50_quantiles</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      2.5%      97.5% 
+         0 1135061538 </code></pre>
+</div>
+</div>
+<section id="question-5-from-these-results-what-are-the-values-for-the-following-calculations" class="level4">
+<h4 class="anchored" data-anchor-id="question-5-from-these-results-what-are-the-values-for-the-following-calculations">Question 5: From these results, what are the values for the following calculations:</h4>
+<ol type="1">
+<li>the percent of populations that go extinct?<br>
+</li>
+<li>the percent of populations that exceed 1 million butterflies in any year?</li>
+<li>the 2.5 and 97.5 quantiles for the final population sizes?</li>
+</ol>
+</section>
+<section id="question-6.-write-a-brief-summary-of-your-results-100-150-words-that-you-might-communicate-to-a-land-manager-about-the-miami-blue-population-dyanamics-and-the-potential-for-extinction." class="level4">
+<h4 class="anchored" data-anchor-id="question-6.-write-a-brief-summary-of-your-results-100-150-words-that-you-might-communicate-to-a-land-manager-about-the-miami-blue-population-dyanamics-and-the-potential-for-extinction.">Question 6. Write a brief summary of your results (100-150 words) that you might communicate to a land manager about the Miami Blue population dyanamics and the potential for extinction.</h4>
+<p>You can ask your assistant to help you with this question (please turn of <strong>Code Interpreter</strong>).</p>
+</section>
+<section id="question-7.-is-this-a-realistic-scenario-or-are-there-any-factors-that-we-might-be-overlooking-about-the-population-dynamics" class="level4">
+<h4 class="anchored" data-anchor-id="question-7.-is-this-a-realistic-scenario-or-are-there-any-factors-that-we-might-be-overlooking-about-the-population-dynamics">Question 7. Is this a realistic scenario or are there any factors that we might be overlooking about the population dynamics?</h4>
+<p>You can ask your assistant to help you with this question (please turn of <strong>Code Interpreter</strong>).</p>
+</section>
+<section id="question-8.-download-and-sumit-your-prompts-and-a-text-file." class="level4">
+<h4 class="anchored" data-anchor-id="question-8.-download-and-sumit-your-prompts-and-a-text-file.">Question 8. Download and sumit your prompts and a text file.</h4>
+</section>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
