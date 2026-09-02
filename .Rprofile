@@ -10,9 +10,9 @@ packages <- c(
 )
 
 # Install any packages not yet installed
-installed <- packages %in% rownames(installed.packages())
+installed <- packages %in% rownames(utils::installed.packages())
 if (any(!installed)) {
-  install.packages(packages[!installed])
+  utils::install.packages(packages[!installed])
 }
 
 # Load all packages
