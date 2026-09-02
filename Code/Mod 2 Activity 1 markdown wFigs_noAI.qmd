@@ -4,9 +4,9 @@ author: "Phil Hahn"
 date: "9/2/2026"
 description: |
     Version using R code with no GenAI
-project:
-  type: website
-  output-dir: docs
+format: 
+  html:
+    code-fold: true
 ---
 
 # Overview
