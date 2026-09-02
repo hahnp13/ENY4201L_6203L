@@ -1,3 +1,7 @@
+# Suppress interactive prompts
+options(repos = c(CRAN = "https://cran.rstudio.com/"))
+
+# Define required packages
 packages <- c(
   "tidyverse",
   "vegan",
@@ -9,14 +13,27 @@ packages <- c(
   "viridis"
 )
 
-installed <- packages %in% rownames(utils::installed.packages())
+# Set up personal library without prompting
+lib_path <- Sys.getenv("R_LIBS_USER")
+if (lib_path == "") {
+  lib_path <- file.path(Sys.getenv("HOME"), ".R", "library")
+}
+dir.create(lib_path, showWarnings = FALSE, recursive = TRUE)
+.libPaths(lib_path)
 
+# Install missing packages non-interactively
+installed <- packages %in% rownames(utils::installed.packages())
 if (any(!installed)) {
-  message("Installing missing packages...")
-  utils::install.packages(packages[!installed], repos = "https://cran.rstudio.com/")
-  message("Installation complete.")
+  utils::install.packages(
+    packages[!installed],
+    lib = lib_path,
+    repos = "https://cran.rstudio.com/",
+    dependencies = TRUE,
+    quiet = TRUE
+  )
 }
 
-message("Loading packages...")
-invisible(lapply(packages, library, character.only = TRUE))
-message("All packages loaded.")
+# Load all packages silently
+suppressPackageStartupMessages(
+  invisible(lapply(packages, library, character.only = TRUE))
+)
