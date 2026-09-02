@@ -275,10 +275,11 @@ Some of the populations are so big that it’s hard to see the patterns for some
 #| warning: false
 #| include: true
 ## lines 92-100 in associated R code
-sim10 <- as_tibble(PopSim(Rs = obs.R, N0 = 43, sims = 100)) %>% 
-  mutate(year = 0:50) %>%  
-  pivot_longer(-year, names_to = "sim", values_to = "count") |> 
-  as.data.frame()
+sim10 <- as_tibble(PopSim(Rs = obs.R, N0 = 43, sims = 100)) %>%
+  mutate(year = 0:50) %>%
+  pivot_longer(-year, names_to = "sim", values_to = "count") %>%
+  as.data.frame() %>%
+  {data.frame(., row.names = NULL)}
 
 # plot the 10 simulated populations
 ggplot(sim10, aes(x=year,y=count,color=sim))+
