@@ -7,6 +7,9 @@ description: |
 format: 
   html:
     code-fold: true
+project:
+  type: website
+  output-dir: docs
 ---
 
 # Overview
