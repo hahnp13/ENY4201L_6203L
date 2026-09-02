@@ -150,7 +150,6 @@ ggplot(data=Nt.all, aes(x=time, y=N, color=group)) +
   theme_bw()
 ```
 
-
 ## Part 2. Miami blue population dynamics case study
 
 ### Part 2a. Review info about the butterfly
@@ -173,7 +172,6 @@ set.seed(5)
 Count <- abs(round(rnorm(21, (100*1.05^year), 70),0))
 dat <- as.data.frame(cbind(year,Count))
 ```
-
 
 #### Question 5: Briefly describe your plot of 22 year population dynamics for the Miami blue butterfly.
 
@@ -222,8 +220,7 @@ Think about what these results imply about the population dynamics and what may 
 
 ### Part 2c. Project out population size estimates for 50 years
 
-WWe know the population size and the rates of increase/decrease for 20 transitions that we have data for. Now we want to know what the population size might be in 50 years. Will it substantially increase? Is there a chance the Miami blue will go extinct?
-We can answer these questions by randomly sampling from our list of 20 R’s. We do this 50 times to simulate population dynamics for 50 years. What density should we start the simulation? We could pick the average density (~100) or the minimum (22). Let’s be conservative and start our simulated population at the minimum of 22 butterflies. Here is the plot for one of these simulations:
+WWe know the population size and the rates of increase/decrease for 20 transitions that we have data for. Now we want to know what the population size might be in 50 years. Will it substantially increase? Is there a chance the Miami blue will go extinct? We can answer these questions by randomly sampling from our list of 20 R’s. We do this 50 times to simulate population dynamics for 50 years. What density should we start the simulation? We could pick the average density (\~100) or the minimum (22). Let’s be conservative and start our simulated population at the minimum of 22 butterflies. Here is the plot for one of these simulations:
 
 #### Question 6: Describe your plot of the 50 year simulation.
 
@@ -256,7 +253,6 @@ Booming!
 This is just one random simulation. We might want to do many versions of this simulation to get an idea of how variables these results might be. We can conduct a sensitivity analysis by running the simulations for 100 populations. From these results, calculate 1) the percent of populations that go extinct, 2) the percent of populations that exceed 1 million butterflies in any year, and 3) the 2.5 quantile and 4) 97.5 quantile for the final population sizes.
 
 Now we should see we have run 100 simulated populations, each with dynamics for 50 years. What do we see? Are they all the same? Why or why not? Here is a plot showing only 10 populations so its easier to see:
-
 
 ```{r}
 #| echo: true
@@ -305,7 +301,6 @@ ggplot(sim10, aes(x=year,y=log(count+1),color=sim))+
   theme(legend.position = "none")
 ```
 
-
 ```{r}
 #| echo: true
 #| warning: false
@@ -328,6 +323,4 @@ data.frame(
 
 #### Question 8. Write a brief summary of your results (100-150 words) that you might communicate to a land manager about the Miami Blue population dynamics and the potential for extinction. Specifically mention whether you think this is a realistic scenario.
 
-
 #### Question 9-10. These question is not relevant for this version, please just enter “NA” or skip
-
