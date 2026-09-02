@@ -6,7 +6,8 @@ packages <- c(
   "DHARMa",
   "easystats",
   "deSolve",
-  "emmeans"
+  "emmeans",
+  "viridis"
 )
 
 # Install any packages not yet installed
