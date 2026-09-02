@@ -1,4 +1,3 @@
-# Define required packages
 packages <- c(
   "tidyverse",
   "vegan",
@@ -10,11 +9,14 @@ packages <- c(
   "viridis"
 )
 
-# Install any packages not yet installed
 installed <- packages %in% rownames(utils::installed.packages())
+
 if (any(!installed)) {
-  utils::install.packages(packages[!installed])
+  message("Installing missing packages...")
+  utils::install.packages(packages[!installed], repos = "https://cran.rstudio.com/")
+  message("Installation complete.")
 }
 
-# Load all packages
+message("Loading packages...")
 invisible(lapply(packages, library, character.only = TRUE))
+message("All packages loaded.")
