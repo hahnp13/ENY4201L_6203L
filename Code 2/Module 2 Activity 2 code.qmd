@@ -67,7 +67,6 @@ In this first example, we have a population that starts with 2 individuals. The 
 #| warning: false
 #| output: false
 
-## lines 3-16 in associated R code
 dlogistic <- function(K = 100, rd = 1, N0 = 2, t = 10) {
   N <- c(N0, numeric(t))
   for (i in 1:t) N[i + 1] <- {
@@ -80,11 +79,15 @@ Nts <- dlogistic()
 
 t <- 10; k <- 100;
 
-ggplot(data=NULL, aes(x=0:10, y=Nts)) + geom_point(size=3) + 
-  geom_line() + geom_hline(yintercept=(k), lty=2) + labs(x="time",y="Count") + 
+ggplot(data=NULL, aes(x=0:10, y=Nts)) + 
+  geom_point(size=3) + 
+  geom_line() + 
+  geom_hline(yintercept=(k), lty=2) + 
+  labs(x="time",y="Count") + 
   theme_bw(base_size = 16)
 
 ```
+
 
 #### Question 1: In what year does the population size reach K??
 
@@ -97,7 +100,9 @@ Now let's look at how starting population size influences the final population s
 
 N0s <- c(1, 10, 50, 110)
 time <- 0:10
-Ndat1 <- sapply(N0s, function(n) dlogistic(N0 = n)) %>% as.data.frame() %>% cbind(time) %>% pivot_longer(cols=1:4, names_to = 'group', values_to = 'N')
+Ndat1 <- sapply(N0s, function(n) dlogistic(N0 = n)) %>% 
+  as.data.frame() %>% cbind(time) %>% 
+  pivot_longer(cols=1:4, names_to = 'group', values_to = 'N')
 
 ggplot(data=Ndat1, aes(x=time, y=N, color=group)) + 
   geom_point(size=3) + 
@@ -106,6 +111,7 @@ ggplot(data=Ndat1, aes(x=time, y=N, color=group)) +
   theme_bw(base_size = 16)
 
 ```
+
 
 #### Question 2: How large are the four populations in year 10?
 
@@ -118,16 +124,18 @@ Now we will vary carrying capacity, **K**, to look at how it influences final po
 
 k.s <- c(50, 100, 250)
 time <- 0:10
-Ndat2 <- sapply(k.s, function(k) dlogistic(K = k, t = 10)) %>% as.data.frame() %>% cbind(time) %>%
+Ndat2 <- sapply(k.s, function(k) dlogistic(K = k, t = 10)) %>% 
+  as.data.frame() %>% cbind(time) %>%
   pivot_longer(cols=1:3, names_to = 'group', values_to = 'N')
 
 ggplot(data=Ndat2, aes(x=time, y=N, color=group)) + 
   geom_point(size=3) + 
   geom_line(linewidth = 1.5) + 
   scale_color_viridis(discrete = T)+   
-  theme_bw()
+  theme_bw(base_size=16)
 
 ```
+
 
 #### Question 3: How large are the three populations in year 10?
 
@@ -141,9 +149,11 @@ We can also change the population growth rate, $\lambda = e ^ {r_d}$, to see how
 rd.v <- seq(1.3, 2.8, by = 0.3)
 t <- 10
 Ndat3 <- sapply(rd.v, function(r) dlogistic(rd = r, t = t)) %>% 
-  as.data.frame() %>% cbind(time) %>% pivot_longer(cols=1:6, names_to = 'group', values_to = 'N')
+  as.data.frame() %>% cbind(time) %>% 
+  pivot_longer(cols=1:6, names_to = 'group', values_to = 'N')
 
-label_names <- c(V1="rd = 1.3",V2="rd = 1.6",V3="rd = 1.9",V4="rd = 2.2",V5="rd = 2.5",V6="rd = 2.8")
+label_names <- c(V1="rd = 1.3",V2="rd = 1.6",V3="rd = 1.9",
+                 V4="rd = 2.2",V5="rd = 2.5",V6="rd = 2.8")
 
 ggplot(data=Ndat3, aes(x=time, y=N)) + 
   geom_point() + 
@@ -153,6 +163,7 @@ ggplot(data=Ndat3, aes(x=time, y=N)) +
   facet_wrap(~group, labeller=labeller(group=label_names))
 
 ```
+
 
 #### Question 4: The above populations differ only in population growth rate ($r_d$). What is the consequence of having a super fast growth rate, specifically above \~rd \> 1.9?
 
@@ -198,8 +209,8 @@ dat <- as.data.frame(cbind(year,Count))
 ggplot(data=dat, aes(x=year, y=Count)) + 
   geom_point() + 
   geom_line() + 
-  theme_bw() + 
-  ggtitle("Miami blue data")
+  theme_bw(base_size=16) + 
+  ggtitle("Miami blue data population dynamics")
 
 dat$obs.R <- NA
 
@@ -210,10 +221,12 @@ ggplot(data=NULL, aes(x=dat$Count[1:20], y=obs.R)) +
   geom_point() + 
   geom_abline(intercept=1,slope=0,lty=2) + 
   xlab("Population density") + ylab("Observed R in any given year") + 
-  theme_bw()
+  theme_bw(base_size=16)+ 
+  ggtitle("Obs R by pop size")
 ```
 
 The above plots show the Miami blue data we collected. The second plot shows that population growth rates can range widely from well above 1 (booming!) to below 1 (declining). Does the observed population growth growth rate (**obs.R**) change with population size?
+
 
 #### Question 5: Does the population growth rate (observed R) change with population density for the Miami blue data?
 
@@ -240,6 +253,7 @@ for (t in 1:50) DD50yr[t + 1] <- {
 
 ggplot(data=NULL, aes(x=years, y=DD50yr)) + 
   geom_line(lwd=1.5)+ 
+  ylab("Population size")+
   ggtitle("Butterfly population with R's selected from data and K=154") + 
   theme_bw(base_size = 16)
 ```
@@ -292,7 +306,8 @@ ggplot(data=NULL, aes(x=DD50yr[1:50], y=simR)) +
   theme_bw(base_size=16)
 ```
 
-Pretty neat, but this is just one simulation, so how much can we really say. Let's do a bunch.
+
+Pretty neat, but this is just one simulation, so how much can we really say. Let's do a bunch. First setup the function.
 
 
 ```{r}
@@ -314,6 +329,7 @@ PopSim1 <- function(N0, years = 50, sims = 1, Ks) {
 }
 ```
 
+
 Let's do the 100 simulations by setting 'sims=100' in the function below.
 
 
@@ -330,6 +346,7 @@ ggplot(simDD10, aes(x=year,y=count,color=sim))+
   theme_bw(base_size = 16)+
   theme(legend.position = "none")
 ```
+
 
 What do we see? Are they all the same? Do we get any crazy high values? Any extinct populations?
 
@@ -355,6 +372,8 @@ data.frame(
 
 ```
 
+
 #### Question 6: From the Miami blue simulations, what is 6.1) percent that went extinct?, 6.2) the maximum population size, 6.3) 2.5% quantile and 6.4) 97.5% quantiles? 
+
 
 #### Question 7: In 100-200 words, describe the biological interpretation of these simulations. Given your management actions (see video), what would you tell a land manager about the probability of extinction for the Miami blue butter within the next 50 years? Or, how large they might be able to expect the population to be in 50 years? Explain the assumptions of you models. Do you believe this is a realistic scenario? Why or why not and compare to the density-independent model?
