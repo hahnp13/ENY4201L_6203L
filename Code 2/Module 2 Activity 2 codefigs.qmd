@@ -2,10 +2,10 @@
 title: 'Module 2 - Activity 2: Density-dependent population dynamics'
 author: "Phil Hahn"
 date: "9/9/2026"
-subtitle: "Outputs only, no code"
+subtitle: "Code only, no output"
 format: docx
 execute:
-  echo: false
+  echo: true
   output: true
   warning: false
   message: false

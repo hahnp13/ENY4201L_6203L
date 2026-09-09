@@ -2,10 +2,13 @@
 title: 'Module 2 - Activity 2: Density-dependent population dynamics'
 author: "Phil Hahn"
 date: "9/9/2026"
-description: |
-    Version using R code with no GenAI
-format: 
-  docx: default
+subtitle: "Code only, no output"
+format: docx
+execute:
+  echo: true
+  output: false
+  warning: false
+  message: false
 ---
 
 # Overview
@@ -37,7 +40,6 @@ By the end of this module, students will be able to:
 ### Task 3: Complete the Assessment in Canvas
 
 ```{r}
-#| warning: false
 library(tidyverse)
 library(viridis)
 ```
@@ -63,9 +65,6 @@ The first part of the equation is simply the discrete exponential growth equatio
 In this first example, we have a population that starts with 2 individuals. The per carrying capacity ($K$) is 100, meaning that when the population reaches 100 the population will stop growing. Before that, it will increase exponentially. We run this first simulation for 10 years.
 
 ```{r}
-#| echo: true
-#| warning: false
-#| output: false
 
 dlogistic <- function(K = 100, rd = 1, N0 = 2, t = 10) {
   N <- c(N0, numeric(t))
@@ -91,12 +90,11 @@ ggplot(data=NULL, aes(x=0:10, y=Nts)) +
 
 #### Question 1: In what year does the population size reach K??
 
+{{< pagebreak >}}
+
 Now let's look at how starting population size influences the final population size. Below is a figure that shows four different starting populations: V1=1, V2=10, V3=50, V4=110.
 
 ```{r}
-#| echo: true
-#| warning: false
-#| output: false
 
 N0s <- c(1, 10, 50, 110)
 time <- 0:10
@@ -115,13 +113,11 @@ ggplot(data=Ndat1, aes(x=time, y=N, color=group)) +
 
 #### Question 2: How large are the four populations in year 10?
 
+{{< pagebreak >}}
+
 Now we will vary carrying capacity, **K**, to look at how it influences final population sizes: V1_K = 50, V2_K = 100, V3_K = 250. All populations start with 2 individuals.
 
 ```{r}
-#| echo: true
-#| warning: false
-#| output: false
-
 k.s <- c(50, 100, 250)
 time <- 0:10
 Ndat2 <- sapply(k.s, function(k) dlogistic(K = k, t = 10)) %>% 
@@ -139,13 +135,11 @@ ggplot(data=Ndat2, aes(x=time, y=N, color=group)) +
 
 #### Question 3: How large are the three populations in year 10?
 
-We can also change the population growth rate, $\lambda = e ^ {r_d}$, to see how this affects populations dynamics. All of these populations have K=100.
+{{< pagebreak >}}
+
+We can also change the population growth rate, $\lambda = e ^ {r_d}$, to see how this affects populations dynamics. Use r = 1.3, 1.6, 1.9, 2.2, 2.5, 2.9. All of these populations have K=100.
 
 ```{r}
-#| echo: true
-#| warning: false
-#| output: false
-
 rd.v <- seq(1.3, 2.8, by = 0.3)
 t <- 10
 Ndat3 <- sapply(rd.v, function(r) dlogistic(rd = r, t = t)) %>% 
@@ -167,13 +161,11 @@ ggplot(data=Ndat3, aes(x=time, y=N)) +
 
 #### Question 4: The above populations differ only in population growth rate ($r_d$). What is the consequence of having a super fast growth rate, specifically above \~rd \> 1.9?
 
+{{< pagebreak >}}
+
 The plot below shows population growth rate against population size for group V3.
 
 ```{r}
-#| echo: true
-#| warning: false
-#| output: false
-
 DD.V1 <- Ndat3 |> dplyr::filter(group=='V3')
 DD.R <- DD.V1$N[2:11]/DD.V1$N[1:10]
 
@@ -187,20 +179,18 @@ ggplot(data=NULL, aes(x=DD.V1$N[1:10], y=DD.R)) +
 
 The red line is plotted at the carrying capacity (K). The dashed line is $\lambda (orR) = 1$. On the y-axis, the graph shows the observed population growth R; when R is above 1 (the dashed line) the population will increase, when R is below 1 it will decrease. What do you see? Think about this...
 
+{{< pagebreak >}}
+
 ## Part 2. Miami blue population dynamics example
 
 Think back to our Miami blue *Cyclargus thomasi bethunbakeri* example -- the endangered species only exists in one small population. Read more about the biology [here](http://entnemdept.ufl.edu/creatures/bfly/miami_blue.htm).
 
-![Miami blue butterflies. credit:J.Gage](/Users/hahnp/OneDrive%20-%20University%20of%20Florida/Pictures/miami-blue-170302-0336.jpg)
+![Miami blue butterflies. credit:J.Gage](miami-blue-170302-0336.jpg)
 
 Recall that we have 21 years of data where researchers counted the butterflies at several sites across their range. The values are estimated population size each year. Remember that these are **simulated data** and do not reflect actual abundances of the butterfly.
 
 
 ```{r}
-#| echo: true
-#| warning: false
-#| output: false
-
 year <- 0:20
 set.seed(5)
 Count <- abs(round(rnorm(21, (100*1.05^year), 70),0))
@@ -236,10 +226,6 @@ We can answer these questions by randomly sampling from our list of 20 R's for e
 
 
 ```{r}
-#| echo: true
-#| warning: false
-#| output: false
-
 years <- 0:50
 set.seed(9)
 simDD.Rs <- sample(x = obs.R, size = 50, replace = TRUE)
@@ -264,10 +250,6 @@ We build in environmental stochasticity by having K vary from year to year, beca
 
 
 ```{r}
-#| echo: true
-#| warning: false
-#| output: false
-
 years <- 0:50
 set.seed(12)
 
@@ -292,10 +274,6 @@ Above we have the graph for one hypothetical population with K's bouncing random
 
 
 ```{r}
-#| echo: true
-#| warning: false
-#| output: false
-
 simR <- NA
 simR <- DD50yr[2:51]/DD50yr[1:50]
 
@@ -311,10 +289,6 @@ Pretty neat, but this is just one simulation, so how much can we really say. Let
 
 
 ```{r}
-#| echo: true
-#| warning: false
-#| output: false
-
 PopSim1 <- function(N0, years = 50, sims = 1, Ks) {
   sim.K = matrix(sample(Ks, size = sims * years, replace = TRUE),
                  nrow = years, ncol = sims)
@@ -334,10 +308,6 @@ Let's do the 100 simulations by setting 'sims=100' in the function below.
 
 
 ```{r}
-#| echo: true
-#| warning: false
-#| output: false
-
 simDD10 <- as.data.frame(PopSim1(N0 = 22, sims = 100, Ks=Ksim)) %>% mutate(year=0:50)  %>%  gather("sim","count",-year)
 
 ggplot(simDD10, aes(x=year,y=count,color=sim))+
@@ -356,18 +326,14 @@ Finally, let's calculate a few summaries of the estimated counts at the end of o
 
 
 ```{r}
-#| echo: true
-#| warning: false
-#| output: false
-
-
 year50_DDdata <- simDD10[simDD10$year == 50, ]
 
 data.frame(
   n_DD_extinct = sum(year50_DDdata$count == 0),
   n_max = max(year50_DDdata$count),
   q02.5 = quantile(year50_DDdata$count, probs = 0.025),
-  q97.5 = quantile(year50_DDdata$count, probs = 0.975)
+  q97.5 = quantile(year50_DDdata$count, probs = 0.975),
+  row.names=NULL
 )
 
 ```
