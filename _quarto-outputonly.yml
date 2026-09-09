@@ -1,0 +1,8 @@
+project:
+  type: website
+  output-dir: docs
+
+#| label: profile-codeonly
+execute:
+  echo: false     # Show the code chunks
+  output: true  # Hide all figures and results
