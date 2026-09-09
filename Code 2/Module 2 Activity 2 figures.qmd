@@ -2,10 +2,12 @@
 title: 'Module 2 - Activity 2: Density-dependent population dynamics'
 author: "Phil Hahn"
 date: "9/9/2026"
-description: |
-    Version using R code with no GenAI
-format: 
-  docx: default
+subtitle: "Full code and outputs"
+format: docx
+execute:
+  echo: false
+  output: true
+  warnings: false
 ---
 
 # Overview

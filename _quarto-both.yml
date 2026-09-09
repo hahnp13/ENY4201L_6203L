@@ -2,7 +2,10 @@ project:
   type: website
   output-dir: docs
 
-#| label: profile-codeonly
+subtitle: "Full code and outputs"
+execute:
+  echo: true
+  output: true
 execute:
   echo: true     # Show the code chunks
   output: true  # Show all figures and results
